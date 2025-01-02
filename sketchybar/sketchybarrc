@@ -1,0 +1,59 @@
+#! /bin/bash
+
+# https://felixkratz.github.io/SketchyBar/config/tricks
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+
+##### Bar Appearance #####
+# https://felixkratz.github.io/SketchyBar/config/bar
+
+sketchybar --bar position=top height=32 shadow=true blur_radius=60 color=0xf02c2e34
+
+##### Changing Defaults #####
+# https://felixkratz.github.io/SketchyBar/config/items
+
+default=(
+  padding_left=5
+  padding_right=5
+  icon.font="SF Pro:Solid:16.0"
+  label.font="SF Pro:Bold:13.0"
+  icon.color=0xffffffff
+  label.color=0xffffffff
+  icon.padding_left=4
+  icon.padding_right=4
+  label.padding_left=4
+  label.padding_right=4
+)
+sketchybar --default "${default[@]}"
+
+##### Adding Left Items #####
+
+sketchybar --add item apple left \
+           --set apple icon=􀣺 label.drawing=off click_script="sketchybar --set apple popup.drawing=toggle popup.background.color=0xf02c2e34 popup.background.border_width=2 popup.background.corner_radius=3 popup.background.border_color=0xff2483ff" \
+           --add item apple.sleep popup.apple \
+           --set apple.sleep icon=􀶠 label="Sleep" click_script="pmset displaysleepnow; sketchybar --set apple popup.drawing=off" \
+           --add item apple.activity_monitor popup.apple \
+           --set apple.activity_monitor icon=􀒓 label="Activity" click_script="open -a Activity\ Monitor; sketchybar --set apple popup.drawing=off" \
+           --add item apple.system_preferences popup.apple \
+           --set apple.system_preferences icon=􀺻 label="System Preferences" click_script="open -a System\ Preferences; sketchybar --set apple popup.drawing=off" \
+           --add item front_app left \
+           --set front_app script="$PLUGIN_DIR/front_app.sh" click_script="sketchybar --set front_app popup.drawing=toggle popup.background.color=0xf02c2e34 popup.background.border_width=2 popup.background.corner_radius=3 popup.background.border_color=0xff2483ff" \
+           --add item front_app.quit popup.front_app \
+           --set front_app.quit icon=􀁡 label="Quit" \
+           --subscribe front_app front_app_switched
+
+##### Adding Right Items #####
+
+sketchybar --add item clock right \
+           --set clock update_freq=10 icon=􀐬  script="$PLUGIN_DIR/clock.sh" \
+           --add item volume right \
+           --set volume script="$PLUGIN_DIR/volume.sh" label.drawing=false \
+           --subscribe volume volume_change \
+           --add item battery right \
+           --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
+           --subscribe battery system_woke power_source_change \
+           --add item network right \
+           --set network update_freq=15 script="$PLUGIN_DIR/network.sh" label.drawing=false \
+
+##### (never do this in a script) #####
+sketchybar --update
