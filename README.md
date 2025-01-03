@@ -1,6 +1,6 @@
 # Simple MacOS Rice
 
-![image](/assets/desktop.png)
+![image](https://github.com/genr234/dotfiles/blob/main/assets/desktop.png?raw=true)
 
 A simple Sketchybar config that is both clean and functional!
 
